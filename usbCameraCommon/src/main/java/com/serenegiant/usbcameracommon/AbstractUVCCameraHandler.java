@@ -205,6 +205,10 @@ abstract class AbstractUVCCameraHandler extends Handler {
 		checkReleased();
 		sendEmptyMessage(MSG_CAPTURE_START);
 	}
+	public void startRecording(final String path) {
+		checkReleased();
+		sendMessage(obtainMessage(MSG_CAPTURE_START, path));
+	}
 
 	public void stopRecording() {
 		sendEmptyMessage(MSG_CAPTURE_STOP);
@@ -312,7 +316,7 @@ abstract class AbstractUVCCameraHandler extends Handler {
 			thread.handleCaptureStill((String)msg.obj);
 			break;
 		case MSG_CAPTURE_START:
-			thread.handleStartRecording();
+			thread.handleStartRecording((String)msg.obj);
 			break;
 		case MSG_CAPTURE_STOP:
 			thread.handleStopRecording();
@@ -549,11 +553,11 @@ abstract class AbstractUVCCameraHandler extends Handler {
 		}
 
 
-		public void handleStartRecording() {
+		public void handleStartRecording(String path) {
 			if (DEBUG) Log.v(TAG_THREAD, "handleStartRecording:");
 			try {
 				if ((mUVCCamera == null) || (mMuxer != null)) return;
-				final MediaMuxerWrapper muxer = new MediaMuxerWrapper(".mp4");	// if you record audio only, ".m4a" is also OK.
+				final MediaMuxerWrapper muxer = new MediaMuxerWrapper(path,".mp4");	// if you record audio only, ".m4a" is also OK.
 				MediaVideoBufferEncoder videoEncoder = null;
 				switch (mEncoderType) {
 				case 1:	// for video capturing using MediaVideoEncoder

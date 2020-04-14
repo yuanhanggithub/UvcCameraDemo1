@@ -134,20 +134,20 @@ public final class USBMonitor {
 		if (!destroyed) {
 			destroyed = true;
 			// モニターしているUSB機器を全てcloseする
-			final Set<UsbDevice> keys = mCtrlBlocks.keySet();
-			if (keys != null) {
-				UsbControlBlock ctrlBlock;
-				try {
-					for (final UsbDevice key: keys) {
-						ctrlBlock = mCtrlBlocks.remove(key);
-						if (ctrlBlock != null) {
-							ctrlBlock.close();
-						}
-					}
-				} catch (final Exception e) {
-					Log.e(TAG, "destroy:", e);
-				}
-			}
+//			final Set<UsbDevice> keys = mCtrlBlocks.keySet();
+//			if (keys != null) {
+//				UsbControlBlock ctrlBlock;
+//				try {
+//					for (final UsbDevice key: keys) {
+//						ctrlBlock = mCtrlBlocks.remove(key);
+//						if (ctrlBlock != null) {
+//							ctrlBlock.close();
+//						}
+//					}
+//				} catch (final Exception e) {
+//					Log.e(TAG, "destroy:", e);
+//				}
+//			}
 			mCtrlBlocks.clear();
 			try {
 				mAsyncHandler.getLooper().quit();

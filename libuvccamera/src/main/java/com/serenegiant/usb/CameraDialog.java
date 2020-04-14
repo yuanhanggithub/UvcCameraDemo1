@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,7 +54,7 @@ public class CameraDialog extends DialogFragment {
 
 	public interface CameraDialogParent {
 		public USBMonitor getUSBMonitor();
-		public void onDialogResult(boolean canceled);
+		public void onDialogResult(boolean canceled,String deviceName);
 	}
 	
 	/**
@@ -173,11 +174,13 @@ public class CameraDialog extends DialogFragment {
 				final Object item = mSpinner.getSelectedItem();
 				if (item instanceof UsbDevice) {
 					mUSBMonitor.requestPermission((UsbDevice)item);//获取设备信息，并检查打开此设备的权限
-					((CameraDialogParent)getActivity()).onDialogResult(false);
+					String deviceName = ((UsbDevice) item).getDeviceName().substring(((UsbDevice) item).getDeviceName().length()-3);
+//					deviceName = deviceName.replace('/','-');
+					((CameraDialogParent)getActivity()).onDialogResult(false,deviceName);
 				}
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
-				((CameraDialogParent)getActivity()).onDialogResult(true);
+				((CameraDialogParent)getActivity()).onDialogResult(true,"");
 				break;
 			}
 		}
@@ -185,7 +188,7 @@ public class CameraDialog extends DialogFragment {
 
 	@Override
 	public void onCancel(final DialogInterface dialog) {
-		((CameraDialogParent)getActivity()).onDialogResult(true);
+		((CameraDialogParent)getActivity()).onDialogResult(true,"");
 		super.onCancel(dialog);
 	}
 

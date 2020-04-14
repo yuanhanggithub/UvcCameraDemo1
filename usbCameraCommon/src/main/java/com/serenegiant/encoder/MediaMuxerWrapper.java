@@ -55,13 +55,22 @@ public class MediaMuxerWrapper {
 	 * @param ext extension of output file
 	 * @throws IOException
 	 */
-	public MediaMuxerWrapper(String ext) throws IOException {
+	public MediaMuxerWrapper(String path ,String ext) throws IOException {
 		if (TextUtils.isEmpty(ext)) ext = ".mp4";
+//		try {
+//			mOutputPath = getCaptureFile(Environment.DIRECTORY_MOVIES, ext).toString();
+//		} catch (final NullPointerException e) {
+//			throw new RuntimeException("This app has no permission of writing external storage");
+//		}
+
 		try {
-			mOutputPath = getCaptureFile(Environment.DIRECTORY_MOVIES, ext).toString();
+			mOutputPath = TextUtils.isEmpty(path)
+					? getCaptureFile(Environment.DIRECTORY_MOVIES, ext).toString()
+					: path;
 		} catch (final NullPointerException e) {
 			throw new RuntimeException("This app has no permission of writing external storage");
 		}
+
 		mMediaMuxer = new MediaMuxer(mOutputPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 		mEncoderCount = mStatredCount = 0;
 		mIsStarted = false;
